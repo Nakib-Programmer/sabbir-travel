@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Dashboard Data 
+    // Dashboard Data
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,8 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/paid-invoice', [InvoiceController::class, 'paidInvoice'])->name('paid-invoice');
     Route::resource('invoices',InvoiceController::class)->names('invoice');
     Route::get('/invoices/{id}/print', [InvoiceController::class, 'print'])->name('invoice.print');
-    // User Managment 
-    
+    // User Managment
+    Route::get('/wafid-slip', [WaffedController::class, 'index'])->name('wafid-slip.index');
+    Route::get('/wafid-slip-create', [WaffedController::class, 'create'])->name('wafid-slip.create');
+    Route::post('/wafid-slip-check', [WaffedController::class, 'fetchMedicalStatus'])->name('wafid-slip.store');
+    Route::get('/check', [WaffedController::class, 'fetchMedicalStatus'])->name('check');
 
 
 });

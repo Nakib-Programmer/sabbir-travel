@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\WafidAppointment;
+use App\Models\WafidMedicalData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
@@ -10,222 +12,206 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class WaffedController extends Controller
 {
-    // WARNING: In a real application, remove the Request parameter only if 
-    // you are 100% sure you do not need it. I'm adding it back to be safe.
-    public function searchSlip(Request $request = null)
-    {
-        // Path used in previous successful communication
-        $nodeExecutablePath = 'C:\Program Files\nodejs\node.exe';
-
-        // Using hardcoded test values
-        $passport = 'A00894589'; 
-        $nationality = '15'; 
-        
-        $cacheKey = 'wafid_' . md5($passport . $nationality);
-        
-        try {
-            // 1. Check cache first
-            if (Cache::has($cacheKey)) {
-                $cachedData = Cache::get($cacheKey);
-                return response()->json([
-                    'success' => true,
-                    'data' => $cachedData,
-                    'message' => 'Appointment details retrieved successfully',
-                    'cached' => true
-                ]);
-            }
-            
-            $scriptPath = base_path('wafid-scraper.cjs'); 
-
-            $process = new Process([
-                $nodeExecutablePath,
-                $scriptPath,
-                $passport,
-                $nationality
-            ]);
-
-            $process->setWorkingDirectory(base_path());
-            $process->setTimeout(60); 
-
-            try {
-                $process->run();
-            } catch (\Exception $e) {
-                // Catches failures BEFORE the process starts
-                return response()->json([
-                    'success' => false,
-                    'message' => "Scraper process failed to start: {$e->getMessage()}",
-                    'data' => null
-                ], 500);
-            }
-
-            // ----------------------------------------------------------------------
-            // THE CRITICAL FIX: Decode the output regardless of success status
-            // because the error message (JSON) is always written to STDOUT.
-            // ----------------------------------------------------------------------
-            $output = $process->getOutput();
-            $result = json_decode($output, true);
-
-            // 2. Handle invalid JSON response (unexpected crash or partial output)
-            if (!$result || !isset($result['success']) || !is_array($result)) {
-                Log::error('Invalid JSON output from Puppeteer', ['output' => $output, 'exit_code' => $process->getExitCode()]);
-                
-                // If we get invalid JSON, but the process failed, return the raw error stream if available.
-                $rawError = $process->getErrorOutput();
-                $message = 'Invalid or empty JSON response from scraper.';
-                if ($rawError) {
-                    $message .= ' Raw Error Stream: ' . trim($rawError);
-                }
-                
-                return response()->json([
-                    'success' => false,
-                    'message' => $message,
-                    'data' => null
-                ], 500);
-            }
-            
-            // 3. Handle success=false from the JS script (this includes CAPTCHA and scraping errors)
-            if (!$result['success']) {
-                // This is where your CAPTCHA REQUIRED message will be handled
-                return response()->json([
-                    'success' => false,
-                    'message' => $result['message'] ?? 'Scraper failed: Unknown reason.',
-                    'data' => null
-                ]);
-            }
-            
-            // 4. Handle successful scrape (found data)
-            $appointmentData = $this->formatAppointmentData($result['data']);
-            Cache::put($cacheKey, $appointmentData, 3600);
-            
-            return response()->json([
-                'success' => true,
-                'data' => $appointmentData,
-                'message' => 'Appointment details retrieved successfully',
-                'cached' => false
-            ]);
-            
-        } catch (ProcessFailedException $e) {
-            Log::error('ProcessFailedException in WaffedController', ['error' => $e->getMessage()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Internal Server Error: Process execution failed.',
-                'data' => null
-            ], 500);
-        } catch (\Exception $e) {
-            Log::error('General Exception in WaffedController', ['error' => $e->getMessage()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Internal Server Error: ' . $e->getMessage(),
-                'data' => null
-            ], 500);
-        }
+    public function index(){
+        return view('backend.wafid.index');
     }
-
-    /**
-     * Format and clean appointment data
-     * (This function is unchanged and works perfectly)
-     */
-    private function formatAppointmentData($rawData)
-    {
-        $formatted = [];
-        
-        $fieldMappings = [
-            'name' => ['name', 'applicant name', 'candidate name', 'full name', 'worker name'],
-            'passport' => ['passport', 'passport no', 'passport number', 'passport no.'],
-            'appointment_date' => ['appointment date', 'date', 'appointment', 'scheduled date', 'test date'],
-            'appointment_time' => ['appointment time', 'time', 'scheduled time', 'test time'],
-            'center' => ['center', 'location', 'venue', 'center name', 'test center', 'medical center'],
-            'reference' => ['reference', 'reference no', 'ref no', 'application no', 'slip no', 'registration no', 'wafid slip no'],
-            'status' => ['status', 'appointment status'],
-            'mobile' => ['mobile', 'phone', 'contact', 'mobile no', 'phone number'],
-            'email' => ['email', 'email address'],
-            'nationality' => ['nationality', 'country'],
-            'profession' => ['profession', 'occupation', 'job title'],
-            'medical_type' => ['medical type', 'examination type', 'test type'],
-        ];
-        
-        foreach ($rawData as $key => $value) {
-            if (empty($value) || $value === 'null' || $value === null) {
-                continue;
-            }
-            
-            $keyLower = strtolower(trim($key));
-            $matched = false;
-            
-            foreach ($fieldMappings as $standardKey => $possibleKeys) {
-                foreach ($possibleKeys as $possibleKey) {
-                    if (stripos($keyLower, $possibleKey) !== false || $keyLower === $possibleKey) {
-                        $formatted[$standardKey] = $this->cleanValue($value);
-                        $matched = true;
-                        break 2;
-                    }
-                }
-            }
-            
-            if (!$matched) {
-                $cleanKey = $this->slugify($key);
-                if ($cleanKey && strlen($cleanKey) > 1) {
-                    $formatted[$cleanKey] = $this->cleanValue($value);
-                }
-            }
-        }
-        
-        if (empty($formatted)) {
-            $formatted['raw_data'] = $rawData;
-        }
-        
-        return $formatted;
+    public function create(){
+        return view('backend.wafid.create');
     }
+ public function fetch1()
+{
+    $passport = 'A00894589';
 
-    /**
-     * Clean and sanitize value
-     * (This function is unchanged)
-     */
-    private function cleanValue($value)
-    {
-        if (!is_string($value)) {
-            return $value;
-        }
-        
-        $value = trim($value);
-        $value = preg_replace('/\s+/', ' ', $value);
-        $value = strip_tags($value);
-        $value = preg_replace('/[\x00-\x1F\x7F]/u', '', $value);
-        
-        return $value;
-    }
+    // 🐍 Use full system Python (recommended)
+    $python = 'C:\Users\User\AppData\Local\Programs\Python\Python313\python.exe';
 
-    /**
-     * Convert key to slug format
-     * (This function is unchanged)
-     */
-    private function slugify($text)
-    {
-        $text = strtolower(trim($text));
-        $text = preg_replace('/[^a-z0-9]+/', '_', $text);
-        $text = trim($text, '_');
-        return $text;
-    }
+    // Or use virtual environment Python if needed:
+    // $python = base_path('venv/Scripts/python.exe');
 
-    /**
-     * Clear cache for a specific passport
-     * (This function is unchanged)
-     */
-    public function clearCache(Request $request)
-    {
-        $request->validate([
-            'passport' => 'required|string|max:50',
-        ]);
-        
-        $passport = $request->passport;
-        $nationality = '15';
-        $cacheKey = 'wafid_' . md5($passport . $nationality);
-        
-        Cache::forget($cacheKey);
-        
+    $script = base_path('python_scripts/wafid_scraper.py');
+
+    // ✅ Pass full environment to avoid Winsock issue
+    $env = [
+        'PATH' => getenv('PATH'),
+        'SystemRoot' => getenv('SystemRoot'),
+        'WINDIR' => getenv('WINDIR'),
+        'TEMP' => getenv('TEMP'),
+        'TMP' => getenv('TMP'),
+    ];
+
+    // 🧠 Create and run process
+    $env['PYTHONIOENCODING'] = 'utf-8';
+    $process = new Process([$python, $script, $passport], base_path(), $env);
+    $process->setTimeout(180);
+
+    $process->run();
+
+    // 🚨 Handle errors
+    if (!$process->isSuccessful()) {
         return response()->json([
-            'success' => true,
-            'message' => 'Cache cleared successfully'
-        ]);
+            'success' => false,
+            'error' => $process->getErrorOutput() ?: $process->getOutput(),
+        ], 500);
     }
+
+    // 🧩 Parse output
+    $output = json_decode($process->getOutput(), true);
+
+    return response()->json($output);
+}
+    public function fetch(Request $request)
+{
+   $passport = $request->input('passport', 'A00894589');
+
+    $python = 'C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
+    $script = base_path('python_scripts/wafid_scraper.py');
+
+    $env = [
+        'PATH' => getenv('PATH'),
+        'SystemRoot' => getenv('SystemRoot'),
+        'WINDIR' => getenv('WINDIR'),
+        'TEMP' => getenv('TEMP'),
+        'TMP' => getenv('TMP'),
+        'PYTHONIOENCODING' => 'utf-8',
+    ];
+
+    $process = new Process([$python, $script, $passport], base_path(), $env);
+    $process->setTimeout(180);
+    $process->run();
+
+    if (!$process->isSuccessful()) {
+        Log::error('Python scraper failed', [
+            'error' => $process->getErrorOutput(),
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'error' => $process->getErrorOutput() ?: $process->getOutput(),
+        ], 500);
+    }
+
+    $data = json_decode($process->getOutput(), true);
+
+    if (empty($data['success']) || !$data['success']) {
+        return response()->json([
+            'success' => false,
+            'error' => $data['error'] ?? 'Unknown Python error',
+        ], 500);
+    }
+
+    // ✅ Parse slip + center data
+    $slip = $data['data']['appointment_slip'] ?? [];
+    $center = $data['data']['medical_center'] ?? [];
+    $info = $center['info'] ?? [];
+
+    // ✅ Store or update record
+    $record = WafidAppointment::updateOrCreate(
+        ['passport' => $passport],
+        [
+            'merchant_reference'     => $slip['Merchant reference №'] ?? null,
+            'gcc_slip_no'            => $slip['GCC Slip №'] ?? null,
+            'first_name'             => $slip['First name'] ?? null,
+            'last_name'              => $slip['Last name'] ?? null,
+            'nationality'            => $slip['Nationality'] ?? 'Bangladesh',
+            'national_id'            => $slip['National ID'] ?? null,
+            'gender'                 => $slip['Gender'] ?? null,
+            'marital_status'         => $slip['Marital status'] ?? null,
+            'country_traveling_to'   => $slip['Country traveling to'] ?? null,
+            'date_of_birth'          => $slip['Date of Birth'] ?? null,
+            'passport_expiry_date'   => $slip['Passport expiry date'] ?? null,
+            'passport_issue_place'   => $slip['Passport issues place'] ?? null,
+            'passport_issue_date'    => $slip['Passport issue date'] ?? null,
+            'applied_position'       => $slip['Applied position'] ?? null,
+            'payment_status'         => $slip['Payment status'] ?? null,
+            'amount'                 => $slip['Amount'] ?? null,
+            'appointment_type'       => $slip['Appointment Type'] ?? null,
+            'medical_center_name'    => $info[0] ?? null,
+            'medical_center_address' => $info[1] ?? null,
+            'medical_center_phone'   => $info[2] ?? null,
+            'medical_center_email'   => $info[3] ?? null,
+            'medical_center_website' => $info[4] ?? null,
+            'barcode'                => $center['barcode'] ?? null,
+            'generated_date'         => $center['generated_date'] ?? null,
+            'valid_till'             => $center['valid_till'] ?? null,
+        ]
+    );
+
+    // 🎯 Final JSON Response
+    return response()->json([
+        'success' => true,
+        'message' => 'Data fetched and stored successfully.',
+        'record' => $record,
+        'url' => $data['url'] ?? null,
+    ]);
+}
+
+public function fetchMedicalStatus(Request $request)
+{
+    $passport = $request->input('passport', 'A00894589');
+    $python = 'C:\Users\User\AppData\Local\Programs\Python\Python313\python.exe';
+    $script = base_path('python_scripts/wafid_medical_status.py');
+
+    $env = [
+        'PATH' => getenv('PATH'),
+        'SystemRoot' => getenv('SystemRoot'),
+        'WINDIR' => getenv('WINDIR'),
+        'TEMP' => getenv('TEMP'),
+        'TMP' => getenv('TMP'),
+        'PYTHONIOENCODING' => 'utf-8',
+    ];
+
+    $process = new Process([$python, $script, $passport], base_path(), $env);
+    $process->setTimeout(180);
+    $process->run();
+
+    if (!$process->isSuccessful()) {
+        return response()->json([
+            'success' => false,
+            'error' => $process->getErrorOutput() ?: $process->getOutput(),
+        ], 500);
+    }
+
+    $output = json_decode($process->getOutput(), true);
+
+    if (!isset($output['success']) || !$output['success'] || empty($output['data'])) {
+        return response()->json([
+            'success' => false,
+            'error' => $output['error'] ?? 'No data found or invalid response',
+        ], 400);
+    }
+
+    $data = $output['data'];
+
+
+    // 🧠 Update existing record or create new one
+    $record = WafidMedicalData::updateOrCreate(
+        ['passport' => $data['passport'] ?? $passport],
+        [
+            'status' => $data['status'] ?? null,
+            'pdf_url' => $data['pdf_url'] ?? null,
+            'print_url' => $data['print_url'] ?? null,
+            'photo' => $data['photo'] ?? null,
+            'name' => $data['name'] ?? null,
+            'phone' => $data['phone'] ?? null,
+            'gender' => $data['gender'] ?? null,
+            'age' => $data['age'] ?? null,
+            'passport_expiry_on' => $data['passport_expiry_on'] ?? null,
+            'nationality_name' => $data['nationality__name'] ?? null,
+            'applied_position_name' => $data['applied_position__name'] ?? null,
+            'marital_status' => $data['marital_status'] ?? null,
+            'traveled_country_name' => $data['traveled_country__name'] ?? null,
+            'height' => $data['height'] ?? null,
+            'medical_center' => $data['medical_center'] ?? null,
+            'weight' => $data['weight'] ?? null,
+            'medical_examination_date' => $data['medical_examination_date'] ?? null,
+            'BMI' => $data['BMI'] ?? null,
+        ]
+    );
+
+    return response()->json([
+        'success' => true,
+        'passport' => $passport,
+        'data' => $record,
+    ]);
+}
 }

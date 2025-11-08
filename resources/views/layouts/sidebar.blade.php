@@ -58,7 +58,7 @@
                                 <ul class="sub-menu mm-collapse" aria-expanded="false" style="height: 0px;">
                                     <li><a href="{{route('medical-test.index')}}" key="t-tui-calendar">Medical Test</a></li>
                                     <li><a href="{{route('medical-center.index')}}" key="t-tui-calendar">Medical Center</a></li>
-                                    <li><a href="{{route('user-list.index')}}" key="t-tui-calendar">User Managment</a></li>
+                                    <li><a href="{{route('wafid-slip.index')}}" key="t-tui-calendar">Wafid</a></li>
                                 </ul>
                             </li>
                             @endif
@@ -70,4 +70,3 @@
             </div>
             <!-- Left Sidebar End -->
 
-            
