@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\WafidAppointment;
 use App\Models\WafidMedicalData;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
@@ -18,6 +19,11 @@ class WaffedController extends Controller
     public function create(){
         return view('backend.wafid.create');
     }
+ public function pdf()
+{
+    return view('backend.wafid.pdf')->with('autoPrint', true);
+}
+
  public function fetch1()
 {
     $passport = 'A00894589';
