@@ -1,11 +1,10 @@
-
 <!doctype html>
 <html lang="bn">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>{{ $medical->passport }}</title>
+  <title>Medical Report - AL MAN MEDICAL CENTER</title>
   <link rel="stylesheet" href="{{ asset('assets') }}/image/style.css">
 </head>
 
@@ -15,7 +14,7 @@
     <!-- Header -->
     <div class="header">
       <div class="header-top">
-        <img src="https://wafid.com/static/svg/logo.svg" alt="Image" style="width: 111px;">
+        <img src="https://wafid.com/static/svg/logo.svg" alt="Image" style="width: 115px;">
         <div class="header-title">
           <div class="title-row">
             <div class="report-divider-line"></div>
@@ -23,30 +22,30 @@
             <div class="report-divider-line"></div>
           </div>
           <div class="center-name">Medical center name</div>
-          <div class="center-name-bold">{{ $medical->medical_center}}</div>
+          <div class="center-name-bold">AL MAN MEDICAL CENTER</div>
         </div>
-        <img src="{{ asset('assets/image/LOGO-01-01.svg') }}" alt="Image" style="width: 225px;">
+        <img src="{{ asset('assets/image/LOGO-01-01.svg') }}" alt="Image">
       </div>
 
       <div class="header-info">
         <div>
           <div class="info-item">G.H.C. Code No.</div>
-          <div class="info-value">{{ $medical->ghc->code ?? '05/08/05' }}</div>
+          <div class="info-value">05/07/04</div>
         </div>
 
         <div>
           <div class="info-item">GCC Slip No</div>
-          <div class="info-value">{{ $slip->gcc_slip_no }}</div>
+          <div class="info-value">91309202574581204</div>
         </div>
 
         <div>
           <div class="info-item">Date examined</div>
-          <div class="info-value">{{ $medical->medical_examination_date }}</div>
+          <div class="info-value">17/09/2025</div>
         </div>
 
         <div>
           <div class="info-item">Report expiry date</div>
-          <div class="info-value">{{ $exp }}</div>
+          <div class="info-value">17/11/2025</div>
         </div>
       </div>
     </div>
@@ -61,36 +60,36 @@
       <div class="candidate-info-wrapper">
         <div class="left-section">
           <div class="person-image">
-            <img src="{{ $medical->photo}}" alt="Person">
+            <img src="./image/person.png" alt="Person">
           </div>
           <div class="candidate-grid">
             <div class="grid-item-full">
               <div class="label">Name</div>
-              <div class="value">{{ $slip->first_name }} {{ $slip->last_name }}</div>
+              <div class="value">MAHBUB RABBANI</div>
             </div>
             <div>
               <div class="label">Marital status</div>
-              <div class="value">{{ $medical->marital_status }}</div>
+              <div class="value">unmarried</div>
             </div>
-            <div class="graps">
+            <div>
               <div class="label">Passport No.</div>
-              <div class="value">{{ $medical->passport }}</div>
+              <div class="value">A15126815</div>
             </div>
-            <div class="graps1">
+            <div>
               <div class="label">Age</div>
-              <div class="value">{{ $medical->age }}</div>
+              <div class="value">25</div>
             </div>
             <div>
               <div class="label">Height</div>
-              <div class="value">{{ $medical->height }} cm</div>
+              <div class="value">175.0 cm</div>
             </div>
-            <div class="graps">
+            <div>
               <div class="label">Weight</div>
-              <div class="value">{{ $medical->weight }} kg</div>
+              <div class="value">66.0 kg</div>
             </div>
-            <div class="graps1">
+            <div>
               <div class="label">BMI</div>
-              <div class="value">{{ $medical->BMI }}</div>
+              <div class="value">21.55</div>
             </div>
           </div>
         </div>
@@ -98,27 +97,27 @@
         <div class="right-section">
           <div>
             <div class="label">Gender</div>
-            <div class="value">{{ $medical->gender }}</div>
+            <div class="value">male</div>
           </div>
           <div>
             <div class="label">Nationality</div>
-            <div class="value">{{ $medical->nationality_name }}</div>
+            <div class="value">Bangladeshi</div>
           </div>
           <div>
             <div class="label">Traveling to</div>
-            <div class="value">{{ $slip->country_traveling_to }}</div>
+            <div class="value">Saudi Arabia</div>
           </div>
           <div>
             <div class="label">Passport expiry date</div>
-            <div class="value">{{ $passportExpiry }}</div>
+            <div class="value">27/07/2034</div>
           </div>
           <div>
             <div class="label">Phone</div>
-            <div class="value">{{ $medical->phone }}</div>
+            <div class="value">+8801700640560</div>
           </div>
           <div>
             <div class="label">Profession</div>
-            <div class="value">{{ $medical->applied_position_name }}</div>
+            <div class="value">Labour</div>
           </div>
         </div>
       </div>
@@ -632,10 +631,10 @@
           </div>
           <div class="remarks-content">
             <div>
-              <img src="{{ asset('assets') }}/image/icon.png" alt="icon">
+              <img src="./image/icon.png" alt="icon">
             </div>
             <div class="remarks-text">
-              Mentioned above is the medical report for Mr./Ms. <span class="remarks-bold"> {{ $slip->first_name }} {{ $slip->last_name }} </span> who is Fit for the above mentioned job according to the GCC criteria
+              Mentioned above is the medical report for Mr./Ms. <span class="remarks-bold"> MAHBUB RABBANI </span> who is Fit for the above mentioned job according to the GCC criteria
             </div>
           </div>
         </div>
@@ -652,7 +651,7 @@
             </div>
           </div>
           <div class="barcode-wrapper">
-            <img src="https://wafid.com{{ $slip->barcode }}" alt="Barcode">
+            <img src="https://wafid.com/get-barcode/JrL9e11wLMReDbk/" alt="Barcode">
           </div>
         </div>
       </div>
@@ -664,6 +663,7 @@
     </div>
 
   </div>
+
   <script>
 window.addEventListener('load', function() {
     setTimeout(function() {

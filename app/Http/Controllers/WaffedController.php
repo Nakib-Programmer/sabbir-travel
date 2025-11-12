@@ -22,6 +22,9 @@ class WaffedController extends Controller
     public function create(){
         return view('backend.wafid.create');
     }
+    public function pdf1(){
+        return view('backend.wafid.pdf1');
+    }
  public function pdf($id)
 {
     $medical = WafidMedicalData::with('ghc')->findOrfail($id);
@@ -82,7 +85,7 @@ $passportExpiry = Carbon::createFromFormat('d/M/Y', $slip->passport_expiry_date)
     public function fetch($passport)
     {
 
-        $python = 'C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
+        $python = 'C:\Users\Nakib\AppData\Local\Programs\Python\Python313\python.exe';
         $script = base_path('python_scripts/wafid_scraper.py');
 
         $env = [
@@ -167,7 +170,7 @@ $passportExpiry = Carbon::createFromFormat('d/M/Y', $slip->passport_expiry_date)
     public function fetchMedicalStatus(Request $request)
     {
         $passport = $request->input('passport');
-        $python = 'C:\Users\User\AppData\Local\Programs\Python\Python313\python.exe';
+        $python = 'C:\Users\Nakib\AppData\Local\Programs\Python\Python313\python.exe';
         $script = base_path('python_scripts/wafid_medical_status.py');
 
         $env = [

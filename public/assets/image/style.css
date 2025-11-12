@@ -62,7 +62,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  margin-top: -2px;
+  margin-top: -30px;
 }
 
 .info-item {
@@ -220,7 +220,7 @@ body {
   font-size: 11px;
   color: #0457d4;
   text-align: center;
-  margin-top: 66px;
+  margin-top: 51px;
 }
 
 /* Signature Section */
