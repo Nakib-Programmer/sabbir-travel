@@ -29,4 +29,8 @@ class WafidMedicalData extends Model
         'medical_examination_date',
         'BMI',
     ];
+
+    public function ghc(){
+        return $this->hasOne(Medical::class,'name','medical_center');
+    }
 }

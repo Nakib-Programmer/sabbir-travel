@@ -12,13 +12,27 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Price</th>
+              <th>Phone</th>
+              <th>Passport</th>
               <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
-           
+             @foreach($fit as $item)
+                <tr>
+                <td>{{$item['name']}}</td>
+                <td>{{$item['phone']}}</td>
+                <td>{{$item['passport']}}</td>
+                <td>
+                <div class="d-flex gap-3">
+                    <a href="{{route('wafid-print', $item['id'])}}" class="btn btn-sm btn-success"><i class="mdi mdi-pencil font-size-18"></i></a>
+
+                </div>
+                </td>
+
+                </tr>
+                @endforeach
           </tbody>
         </table>
       </div>

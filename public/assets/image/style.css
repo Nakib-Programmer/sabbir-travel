@@ -1,0 +1,281 @@
+/* Base Styles */
+body {
+  font-family: system-ui;
+  background-color: #fff;
+}
+
+/* Container */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+}
+
+/* Header Section */
+.header {
+  margin-bottom: 10px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-title {
+  text-align: center;
+}
+
+.title-row {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.title-text {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.report-divider-line {
+  flex: 1;
+  height: 1px;
+  background: #dfdfdf;
+  min-width: 50px;
+}
+
+.center-name {
+  font-size: 11px;
+}
+
+.center-name-bold {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.header-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: -2px;
+}
+
+.info-item {
+  font-size: 11px;
+  text-align: center;
+}
+
+.info-value {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Personal Details */
+.personal-details {
+  margin-bottom: 5px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  margin: 5px 0;
+}
+
+.candidate-info-wrapper {
+  display: flex;
+  align-items: start;
+  gap: 30px;
+  margin-bottom: 10px;
+}
+
+.left-section {
+  width: 50%;
+  display: flex;
+  gap: 30px;
+}
+
+.person-image {
+  width: 120px;
+}
+
+.person-image img {
+  width: 100%;
+}
+
+.candidate-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  margin-top: 20px;
+}
+.candidate-grid .graps{
+ padding-left: 5px;
+}
+.candidate-grid .graps1{
+ padding-left: 10px;
+}
+
+.grid-item-full {
+  text-align: left;
+  grid-column: span 3 / span 3;
+  grid-column-start: 1;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+
+.right-section {
+  width: 50%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 7px;
+  margin-top: 20px;
+}
+
+.label {
+  font-size: 11px;
+}
+
+.value {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Main Content */
+.main-content {
+  margin-bottom: 5px;
+  display: flex;
+  gap: 30px;
+}
+
+.column {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Medical Examination */
+.subsection-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.subsection-title-padded {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  margin-left: 20px;
+}
+
+.subsection-text {
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-left: 10px;
+}
+
+.two-column-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 10px;
+  margin-bottom: 3px;
+}
+
+.grid-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.label-right {
+  font-size: 11px;
+  text-align: right;
+}
+
+.section-margin {
+  margin-bottom: 3px;
+}
+
+/* Address Footer */
+.address-footer {
+  font-size: 11px;
+  color: #0457d4;
+  text-align: center;
+  margin-top: 66px;
+}
+
+/* Signature Section */
+.signature-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 40px;
+  font-size: 11px;
+  margin-top: 50px;
+}
+
+.signature-item {
+  width: 100%;
+}
+
+.signature-image-wrapper {
+  width: 180px;
+}
+
+.signature-image-wrapper img {
+  width: 100%;
+}
+
+.signature-border {
+  border-top: 1px solid #252525;
+}
+
+.barcode-wrapper {
+  width: 100%;
+}
+
+.barcode-wrapper img {
+  width: 100%;
+}
+
+/* Remarks */
+.remarks-content {
+  display: flex;
+  gap: 10px;
+}
+
+.remarks-text {
+  font-size: 11px;
+}
+
+.remarks-bold {
+  font-weight: 600;
+}
+
+
+@media print {
+    .report-divider-line {
+        background: #ddd !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+}

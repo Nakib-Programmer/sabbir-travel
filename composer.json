@@ -11,6 +11,7 @@
         "barryvdh/laravel-snappy": "^1.0",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+        "mpdf/mpdf": "^8.2",
         "spatie/browsershot": "^5.0",
         "symfony/css-selector": "^7.3",
         "symfony/dom-crawler": "^7.3",

@@ -12,6 +12,7 @@
           <thead>
             <tr>
               <th>Name</th>
+              <th>Code</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -20,6 +21,7 @@
             @foreach($data as $item)
             <tr>
               <td>{{$item['name']}}</td>
+              <td>{{$item['code']}}</td>
               <td>
               <div class="d-flex gap-3">
                 <a href="{{route('medical-center.edit', $item['id'])}}" class="btn btn-sm btn-success"><i class="mdi mdi-pencil font-size-18"></i></a>

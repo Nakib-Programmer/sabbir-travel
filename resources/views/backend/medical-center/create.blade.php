@@ -24,6 +24,12 @@
                   <input type="text" class="form-control" value="{{ old('name') }}" name="name" required placeholder="Type Name" />
                 </div>
               </div>
+              <div class="col-6 mt-2">
+                <div class="mb-3">
+                  <label class="form-label">Code</label>
+                  <input type="text" class="form-control" value="{{ old('code') }}" name="code" required placeholder="Type code" />
+                </div>
+              </div>
               <div class="col-6">
                 <div class="d-flex flex-wrap gap-2" style="margin-top: 1cm;">
                   <button type="submit" class="btn btn-primary waves-effect waves-light">
