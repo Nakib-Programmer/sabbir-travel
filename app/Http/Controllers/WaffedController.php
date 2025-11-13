@@ -46,6 +46,7 @@ $passportExpiry = Carbon::createFromFormat('d/M/Y', $slip->passport_expiry_date)
     $passport = 'A00894589';
 
     // 🐍 Use full system Python (recommended)
+    // $python = 'C:\Users\User\AppData\Local\Programs\Python\Python313\python.exe';
     $python = 'C:\Users\User\AppData\Local\Programs\Python\Python313\python.exe';
 
     // Or use virtual environment Python if needed:
@@ -85,7 +86,8 @@ $passportExpiry = Carbon::createFromFormat('d/M/Y', $slip->passport_expiry_date)
     public function fetch($passport)
     {
 
-        $python = 'C:\Users\Nakib\AppData\Local\Programs\Python\Python313\python.exe';
+        // $python = 'C:\Users\Nakib\AppData\Local\Programs\Python\Python313\python.exe';
+        $python = 'C:\Users\User\AppData\Local\Programs\Python\Python313\python.exe';
         $script = base_path('python_scripts/wafid_scraper.py');
 
         $env = [
@@ -170,7 +172,8 @@ $passportExpiry = Carbon::createFromFormat('d/M/Y', $slip->passport_expiry_date)
     public function fetchMedicalStatus(Request $request)
     {
         $passport = $request->input('passport');
-        $python = 'C:\Users\Nakib\AppData\Local\Programs\Python\Python313\python.exe';
+        // $python = 'C:\Users\Nakib\AppData\Local\Programs\Python\Python313\python.exe';
+         $python = 'C:\Users\User\AppData\Local\Programs\Python\Python313\python.exe';
         $script = base_path('python_scripts/wafid_medical_status.py');
 
         $env = [
@@ -233,6 +236,10 @@ $passportExpiry = Carbon::createFromFormat('d/M/Y', $slip->passport_expiry_date)
             ]
         );
 
-        return redirect()->route('wafid-slip.index');
+        if ($data['status'] == 'Fit') {
+            return redirect()->route('wafid-slip.index')->with('open_print_id', $record->id);
+        } else {
+            return redirect()->route('wafid-slip.index');
+        }
     }
 }

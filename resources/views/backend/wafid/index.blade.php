@@ -41,5 +41,9 @@
   <!-- end col -->
 </div>
 <!-- end row -->
-
+@if (session('open_print_id'))
+    <script>
+        window.open("{{ route('wafid-print', session('open_print_id')) }}", "_blank");
+    </script>
+@endif
 @endsection
