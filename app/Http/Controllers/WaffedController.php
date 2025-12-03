@@ -206,7 +206,7 @@ $passportExpiry = Carbon::createFromFormat('d/M/Y', $slip->passport_expiry_date)
         }
 
         $data = $output['data'];
-
+        
         if($data['status'] == 'Fit'){
             $this->fetch($passport);
         }
@@ -233,6 +233,7 @@ $passportExpiry = Carbon::createFromFormat('d/M/Y', $slip->passport_expiry_date)
                 'weight' => $data['weight'] ?? null,
                 'medical_examination_date' => $data['medical_examination_date'] ?? null,
                 'BMI' => $data['BMI'] ?? null,
+                'blood_group' => $data['blood_group'] ?? null,
             ]
         );
 
@@ -242,4 +243,248 @@ $passportExpiry = Carbon::createFromFormat('d/M/Y', $slip->passport_expiry_date)
             return redirect()->route('wafid-slip.index');
         }
     }
+
+
+
+
+
+
+
+
+
+        private $pythonPath;
+    private $scriptPath;
+
+    public function __construct()
+    {
+        $this->pythonPath = 'C:\Users\User\AppData\Local\Programs\Python\Python313\python.exe';
+        $this->scriptPath = base_path('python_scripts/booking.py');
+    }
+
+    /**
+     * Get all booking data
+     */
+    public function booking()
+    {
+        try {
+            $result = $this->runPythonScript();
+
+            if (!$result['success']) {
+                return response()->json([
+                    'success' => false,
+                    'error' => $result['error']
+                ], 500);
+            }
+
+            return response()->json($result['data']);
+
+        } catch (\Exception $e) {
+            Log::error('Booking scraper error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Search medical centers by location
+     */
+    public function searchMedicalCenters(Request $request)
+    {
+        $request->validate([
+            'country' => 'required|string|max:10',
+            'city' => 'required|string|max:10',
+            'country_traveling_to' => 'required|string|max:10'
+        ]);
+
+        try {
+            $result = $this->runPythonScript([
+                'search',
+                $request->country,
+                $request->city,
+                $request->country_traveling_to
+            ]);
+
+            if (!$result['success']) {
+                return response()->json([
+                    'success' => false,
+                    'error' => $result['error']
+                ], 500);
+            }
+
+            return response()->json($result['data']);
+
+        } catch (\Exception $e) {
+            Log::error('Medical center search error', [
+                'error' => $e->getMessage(),
+                'params' => $request->all()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get cities by country
+     */
+    public function getCitiesByCountry(Request $request)
+    {
+        $request->validate([
+            'country' => 'required|string|max:10'
+        ]);
+
+        try {
+            $result = $this->runPythonScript([
+                'cities',
+                $request->country
+            ]);
+
+            if (!$result['success']) {
+                return response()->json([
+                    'success' => false,
+                    'error' => $result['error']
+                ], 500);
+            }
+
+            return response()->json([
+                'success' => true,
+                'cities' => $result['data']['cities'] ?? []
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Get cities error', [
+                'error' => $e->getMessage(),
+                'country' => $request->country
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get working hours for a medical center
+     */
+    public function getWorkingHours(Request $request)
+    {
+        $request->validate([
+            'medical_center_id' => 'required|string'
+        ]);
+
+        try {
+            $result = $this->runPythonScript([
+                'working_hours',
+                $request->medical_center_id
+            ]);
+
+            if (!$result['success']) {
+                return response()->json([
+                    'success' => false,
+                    'error' => $result['error']
+                ], 500);
+            }
+
+            return response()->json([
+                'success' => true,
+                'working_hours' => $result['data']['working_hours'] ?? null
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Get working hours error', [
+                'error' => $e->getMessage(),
+                'mc_id' => $request->medical_center_id
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Run Python script with arguments
+     */
+    private function runPythonScript(array $args = [])
+    {
+        // Build command
+        $command = array_merge([$this->pythonPath, $this->scriptPath], $args);
+
+        // Set environment variables
+        $env = [
+            'PATH' => getenv('PATH'),
+            'SystemRoot' => getenv('SystemRoot'),
+            'WINDIR' => getenv('WINDIR'),
+            'TEMP' => getenv('TEMP'),
+            'TMP' => getenv('TMP'),
+            'PYTHONIOENCODING' => 'utf-8',
+        ];
+
+        // Create and run process
+        $process = new Process($command, base_path(), $env);
+        $process->setTimeout(180);
+
+        try {
+            $process->mustRun();
+
+            $output = $process->getOutput();
+            $data = json_decode($output, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Invalid JSON response from Python script: ' . json_last_error_msg());
+            }
+
+            return [
+                'success' => $data['success'] ?? false,
+                'data' => $data,
+                'error' => $data['error'] ?? null
+            ];
+
+        } catch (ProcessFailedException $e) {
+            Log::error('Python process failed', [
+                'command' => $command,
+                'output' => $process->getOutput(),
+                'error' => $process->getErrorOutput()
+            ]);
+
+            return [
+                'success' => false,
+                'data' => null,
+                'error' => $process->getErrorOutput() ?: $process->getOutput()
+            ];
+        }
+    }
+
+    /**
+     * Test endpoint to verify Python integration
+     */
+    public function testConnection()
+    {
+        try {
+            $result = $this->runPythonScript();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Python integration working!',
+                'metadata' => $result['data']['metadata'] ?? null
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

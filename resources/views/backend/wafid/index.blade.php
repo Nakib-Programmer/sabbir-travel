@@ -11,6 +11,7 @@
         <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
           <thead>
             <tr>
+              <td>SL</td>
               <th>Name</th>
               <th>Phone</th>
               <th>Passport</th>
@@ -21,15 +22,16 @@
           <tbody>
              @foreach($fit as $item)
                 <tr>
-                <td>{{$item['name']}}</td>
-                <td>{{$item['phone']}}</td>
-                <td>{{$item['passport']}}</td>
-                <td>
-                <div class="d-flex gap-3">
-                    <a href="{{route('wafid-print', $item['id'])}}" class="btn btn-sm btn-success"><i class="mdi mdi-pencil font-size-18"></i></a>
+                    <td>{{ $item['id'] }}</td>
+                    <td>{{$item['name']}}</td>
+                    <td>{{$item['phone']}}</td>
+                    <td>{{$item['passport']}}</td>
+                    <td>
+                    <div class="d-flex gap-3">
+                        <a href="{{route('wafid-print', $item['id'])}}" class="btn btn-sm btn-success"><i class="mdi mdi-pencil font-size-18"></i></a>
 
-                </div>
-                </td>
+                    </div>
+                    </td>
 
                 </tr>
                 @endforeach

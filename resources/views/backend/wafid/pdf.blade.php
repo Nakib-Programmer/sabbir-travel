@@ -445,7 +445,7 @@
               <div class="two-column-grid">
                 <div class="grid-row">
                   <div class="label-right">Blood group</div>
-                  <div class="value">O+</div>
+                  <div class="value">{{ $medical->blood_group }}</div>
                 </div>
                 <div class="grid-row">
                   <div class="label-right">Haemoglobin g/dL</div>

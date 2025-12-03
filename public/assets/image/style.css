@@ -2,6 +2,7 @@
 body {
   font-family: system-ui;
   background-color: #fff;
+    margin: 0 auto;
 }
 
 /* Container */
@@ -220,7 +221,7 @@ body {
   font-size: 11px;
   color: #0457d4;
   text-align: center;
-  margin-top: 51px;
+  margin-top: 60px;
 }
 
 /* Signature Section */

@@ -28,6 +28,7 @@ class WafidMedicalData extends Model
         'weight',
         'medical_examination_date',
         'BMI',
+        'blood_group',
     ];
 
     public function ghc(){

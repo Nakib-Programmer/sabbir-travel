@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/wafid-slip-check', [WaffedController::class, 'fetchMedicalStatus'])->name('wafid-slip.store');
     Route::get('/check/{id}', [WaffedController::class, 'fetch'])->name('check');
     Route::get('/wafid-print/{id}', [WaffedController::class, 'pdf'])->name('wafid-print');
+    Route::get('/booking', [WaffedController::class, 'booking'])->name('booking');
 
 
 });

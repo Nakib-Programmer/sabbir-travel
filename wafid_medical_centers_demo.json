@@ -1,0 +1,515 @@
+{
+  "cities": {
+    "BD": [
+      [
+        2031,
+        "Barishal",
+        "BD"
+      ],
+      [
+        2061,
+        "Chandpur",
+        "BD"
+      ],
+      [
+        81,
+        "Chitagong",
+        "BD"
+      ],
+      [
+        2033,
+        "Cox's Bazar",
+        "BD"
+      ],
+      [
+        2032,
+        "Cumilla",
+        "BD"
+      ],
+      [
+        80,
+        "Dhaka",
+        "BD"
+      ],
+      [
+        2030,
+        "Rajshahi",
+        "BD"
+      ],
+      [
+        2059,
+        "Sherpur",
+        "BD"
+      ],
+      [
+        83,
+        "Sylhet",
+        "BD"
+      ]
+    ],
+    "PAK": [
+      [
+        73,
+        "Islamabad",
+        "PAK"
+      ],
+      [
+        74,
+        "Karachi",
+        "PAK"
+      ],
+      [
+        75,
+        "Lahore",
+        "PAK"
+      ],
+      [
+        76,
+        "Multan",
+        "PAK"
+      ],
+      [
+        77,
+        "Peshawar",
+        "PAK"
+      ]
+    ],
+    "PHL": [
+      [
+        78,
+        "Manila",
+        "PHL"
+      ],
+      [
+        79,
+        "Cebu",
+        "PHL"
+      ],
+      [
+        104,
+        "Bacolod",
+        "PHL"
+      ],
+      [
+        105,
+        "Davao",
+        "PHL"
+      ]
+    ]
+  },
+  "nationalities": {
+    "BD": [
+      [
+        15,
+        "Bangladeshi",
+        "BD"
+      ]
+    ],
+    "PAK": [
+      [
+        135,
+        "Pakistani",
+        "PAK"
+      ]
+    ],
+    "PHL": [
+      [
+        177,
+        "Filipino",
+        "PHL"
+      ]
+    ],
+    "ACT": [
+      [
+        1,
+        "Indian",
+        "ACT"
+      ]
+    ]
+  },
+  "city_medical_centers": {
+    "80": [
+      [
+        "",
+        "Auto assign",
+        80,
+        "BH"
+      ],
+      [
+        "",
+        "Auto assign",
+        80,
+        "KW"
+      ],
+      [
+        "",
+        "Auto assign",
+        80,
+        "OM"
+      ],
+      [
+        "",
+        "Auto assign",
+        80,
+        "QA"
+      ],
+      [
+        "",
+        "Auto assign",
+        80,
+        "SA"
+      ],
+      [
+        "",
+        "Auto assign",
+        80,
+        "UAE"
+      ],
+      [
+        "",
+        "Auto assign",
+        80,
+        "YEM"
+      ]
+    ],
+    "81": [
+      [
+        "",
+        "Auto assign",
+        81,
+        "BH"
+      ],
+      [
+        "",
+        "Auto assign",
+        81,
+        "KW"
+      ],
+      [
+        "",
+        "Auto assign",
+        81,
+        "SA"
+      ],
+      [
+        "",
+        "Auto assign",
+        81,
+        "UAE"
+      ]
+    ],
+    "78": [
+      [
+        300,
+        "MABINI MEDICAL CLINIC",
+        78,
+        "BH"
+      ],
+      [
+        300,
+        "MABINI MEDICAL CLINIC",
+        78,
+        "KW"
+      ],
+      [
+        300,
+        "MABINI MEDICAL CLINIC",
+        78,
+        "SA"
+      ],
+      [
+        300,
+        "MABINI MEDICAL CLINIC",
+        78,
+        "UAE"
+      ],
+      [
+        301,
+        "INTERNATIONAL DIAGNOSTIC CENTER",
+        78,
+        "BH"
+      ],
+      [
+        301,
+        "INTERNATIONAL DIAGNOSTIC CENTER",
+        78,
+        "KW"
+      ],
+      [
+        301,
+        "INTERNATIONAL DIAGNOSTIC CENTER",
+        78,
+        "SA"
+      ],
+      [
+        302,
+        "S.M. LAZO MEDICAL CLINIC INC.",
+        78,
+        "BH"
+      ],
+      [
+        302,
+        "S.M. LAZO MEDICAL CLINIC INC.",
+        78,
+        "KW"
+      ],
+      [
+        302,
+        "S.M. LAZO MEDICAL CLINIC INC.",
+        78,
+        "SA"
+      ]
+    ],
+    "74": [
+      [
+        "",
+        "Auto assign",
+        74,
+        "BH"
+      ],
+      [
+        "",
+        "Auto assign",
+        74,
+        "KW"
+      ],
+      [
+        "",
+        "Auto assign",
+        74,
+        "SA"
+      ],
+      [
+        "",
+        "Auto assign",
+        74,
+        "UAE"
+      ]
+    ]
+  },
+  "country_medical_centers": {
+    "BD": [
+      [
+        6095,
+        "TRUST MEDICAL & DIAGNOSTIC CENTER",
+        "BD",
+        "BH"
+      ],
+      [
+        6095,
+        "TRUST MEDICAL & DIAGNOSTIC CENTER",
+        "BD",
+        "KW"
+      ],
+      [
+        6095,
+        "TRUST MEDICAL & DIAGNOSTIC CENTER",
+        "BD",
+        "SA"
+      ],
+      [
+        6202,
+        "Reda Hamzah Diagnostic",
+        "BD",
+        "SA"
+      ],
+      [
+        686,
+        "Medicare Medical Check-up Centre",
+        "BD",
+        "AE"
+      ]
+    ],
+    "PHL": [
+      [
+        312,
+        "MYHEALTHYWAY Clinic and Laboratory Corp",
+        "PHL",
+        "BH"
+      ],
+      [
+        312,
+        "MYHEALTHYWAY Clinic and Laboratory Corp",
+        "PHL",
+        "KW"
+      ],
+      [
+        312,
+        "MYHEALTHYWAY Clinic and Laboratory Corp",
+        "PHL",
+        "UAE"
+      ],
+      [
+        640,
+        "Watanak Diagnostic Center",
+        "PHL",
+        "BH"
+      ],
+      [
+        640,
+        "Watanak Diagnostic Center",
+        "PHL",
+        "SA"
+      ]
+    ]
+  },
+  "city_premium_medical_centers": {
+    "78": [
+      [
+        300,
+        "MABINI MEDICAL CLINIC",
+        78,
+        "SA"
+      ],
+      [
+        301,
+        "INTERNATIONAL DIAGNOSTIC CENTER",
+        78,
+        "SA"
+      ],
+      [
+        302,
+        "S.M. LAZO MEDICAL CLINIC INC.",
+        78,
+        "SA"
+      ]
+    ],
+    "79": [
+      [
+        316,
+        "St. Peter Paul Medical Clinic Inc - Cebu",
+        79,
+        "BH"
+      ],
+      [
+        316,
+        "St. Peter Paul Medical Clinic Inc - Cebu",
+        79,
+        "SA"
+      ],
+      [
+        314,
+        "Cebu Physicians Diagnostic Services Center Inc.",
+        79,
+        "SA"
+      ]
+    ]
+  },
+  "working_days": {
+    "300": [
+      [
+        1,
+        300,
+        "monday",
+        "08:00:00",
+        "17:00:00"
+      ],
+      [
+        2,
+        300,
+        "tuesday",
+        "08:00:00",
+        "17:00:00"
+      ],
+      [
+        3,
+        300,
+        "wednesday",
+        "08:00:00",
+        "17:00:00"
+      ],
+      [
+        4,
+        300,
+        "thursday",
+        "08:00:00",
+        "17:00:00"
+      ],
+      [
+        5,
+        300,
+        "friday",
+        "08:00:00",
+        "12:00:00"
+      ],
+      [
+        6,
+        300,
+        "saturday",
+        null,
+        null
+      ],
+      [
+        7,
+        300,
+        "sunday",
+        null,
+        null
+      ]
+    ],
+    "301": [
+      [
+        1,
+        301,
+        "sunday",
+        "09:00:00",
+        "18:00:00"
+      ],
+      [
+        2,
+        301,
+        "monday",
+        "09:00:00",
+        "18:00:00"
+      ],
+      [
+        3,
+        301,
+        "tuesday",
+        "09:00:00",
+        "18:00:00"
+      ],
+      [
+        4,
+        301,
+        "wednesday",
+        "09:00:00",
+        "18:00:00"
+      ],
+      [
+        5,
+        301,
+        "thursday",
+        "09:00:00",
+        "18:00:00"
+      ],
+      [
+        6,
+        301,
+        "friday",
+        null,
+        null
+      ],
+      [
+        7,
+        301,
+        "saturday",
+        "09:00:00",
+        "14:00:00"
+      ]
+    ]
+  },
+  "manual_mc_countries": [
+    "PHL",
+    "TUR",
+    "TNZ",
+    "LB",
+    "TH"
+  ],
+  "free_mc_countries": [
+    "SUD",
+    "PHL"
+  ],
+  "standard_appointment_price": 10.0,
+  "scraped_at": "2025-11-15 01:17:15"
+}
